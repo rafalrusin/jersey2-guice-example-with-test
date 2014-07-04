@@ -5,6 +5,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import example.EmbeddedTomcat;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,19 +29,20 @@ public class ServiceTomcatTest {
     }
 
     @Test
-    public void givenRunningJettyInstance_whenGetMyresource_thenServiceStringReturned() {
+    public void givenRunningJettyInstance_whenGetMyresource_thenServiceStringReturned() throws InterruptedException {
         Client client = ClientBuilder.newClient();
         
         System.out.println(embeddedTomcat.getBaseURI());
         
         WebTarget path = client.target(embeddedTomcat.getBaseURI())
-                        .path("myresource");
+                        .path("api/myresource");
         String entity = path
                         .request(MediaType.TEXT_PLAIN_TYPE)
                         .get(String.class);
 
         assertEquals(Service.SERVICE_STRING, entity);
-        
+
+//        Thread.sleep(1000000);
         
     }
 

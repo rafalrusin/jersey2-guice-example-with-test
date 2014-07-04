@@ -1,4 +1,4 @@
-
+package example;
 
 import java.net.URI;
 
@@ -12,7 +12,7 @@ import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.startup.Tomcat;
 
 /**
- * Provides a simple way to start up tomcat running the webapp defined by the using project.
+ * Provides a simple way to start up tomcat running the webapps defined by the using project.
  * 
  */
 public class EmbeddedTomcat {
@@ -20,7 +20,7 @@ public class EmbeddedTomcat {
     private Tomcat tomcat;
 
     public URI getBaseURI() {
-        return UriBuilder.fromUri("http://localhost/").port(tomcat.getConnector().getLocalPort()).build();
+        return UriBuilder.fromUri("http://localhost/webapp/").port(tomcat.getConnector().getLocalPort()).build();
     }
 
     public void start() throws ServletException, LifecycleException {
@@ -33,7 +33,7 @@ public class EmbeddedTomcat {
             }
         }
         // This tells Tomcat to select an available port it probably wont be 0
-        tomcat.setPort(0);
+        tomcat.setPort(8080);
         // This ensures that the temp work folder of Tomcat is created in target which is a safe location
         tomcat.setBaseDir("target");
         /*
@@ -48,8 +48,8 @@ public class EmbeddedTomcat {
         AprLifecycleListener listener = new AprLifecycleListener();
         server.addLifecycleListener(listener);
 
-        // Add webapp as found relative to the target path
-        tomcat.addWebapp("/", "../src/main/webapp");
+        // Add webapps as found relative to the target path
+        tomcat.addWebapp("/webapp", "../src/main/tomcat/webapps/webapp");
         tomcat.start();
     }
 

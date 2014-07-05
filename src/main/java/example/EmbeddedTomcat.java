@@ -1,5 +1,6 @@
 package example;
 
+import java.io.File;
 import java.net.URI;
 
 import javax.servlet.ServletException;
@@ -33,9 +34,17 @@ public class EmbeddedTomcat {
             }
         }
         // This tells Tomcat to select an available port it probably wont be 0
-        tomcat.setPort(8080);
+        int port = Integer.parseInt(System.getProperty("tomcat.port", "8080"));
+        tomcat.setPort(port);
         // This ensures that the temp work folder of Tomcat is created in target which is a safe location
-        tomcat.setBaseDir("target");
+        String basedir = "work_" + port;
+        {
+            File file = new File(basedir);
+            if (!file.isDirectory()) {
+                file.mkdir();
+            }
+        }
+        tomcat.setBaseDir(basedir);
         /*
          * This is the base path used to find webapps given their path when calling addWebapp starting from the basedir,
          * we nullify it so we are also starting from target
@@ -51,6 +60,8 @@ public class EmbeddedTomcat {
         // Add webapps as found relative to the target path
         tomcat.addWebapp("/webapp", "../src/main/tomcat/webapps/webapp");
         tomcat.start();
+
+        System.out.println(getBaseURI());
     }
 
     public final void stop() throws LifecycleException {

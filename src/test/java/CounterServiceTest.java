@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -6,16 +7,13 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import example.EmbeddedTomcat;
+import example.guice.CounterService;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import example.guice.Service;
-
-public class ServiceTomcatTest {
-
+public class CounterServiceTest {
     private static EmbeddedTomcat embeddedTomcat;
-    
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -29,21 +27,15 @@ public class ServiceTomcatTest {
     }
 
     @Test
-    public void givenRunningJettyInstance_whenGetMyresource_thenServiceStringReturned() throws InterruptedException {
+    public void testCounter() throws InterruptedException {
         Client client = ClientBuilder.newClient();
         
-        System.out.println(embeddedTomcat.getBaseURI());
-        
         WebTarget path = client.target(embeddedTomcat.getBaseURI())
-                        .path("api/myresource");
-        String entity = path
+                        .path("api/counter");
+        String result = path
                         .request(MediaType.TEXT_PLAIN_TYPE)
                         .get(String.class);
 
-        assertEquals(Service.SERVICE_STRING, entity);
-
-//        Thread.sleep(1000000);
-        
+        Integer.parseInt(result);
     }
-
 }

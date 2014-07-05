@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 
-import example.guice.Service;
+import example.guice.CounterService;
 //import com.sun.jersey.api.core.PackagesResourceConfig;
 //import com.sun.jersey.api.core.ResourceConfig;
 //import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
@@ -42,7 +42,7 @@ public class Main extends GuiceServletContextListener {
             // Configure your IOC
             @Override
             protected void configureServlets() {
-                bind(Service.class);
+                bind(CounterService.class);
             }
         });
         
